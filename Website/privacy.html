@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politique de Confidentialité - CourrierCode</title>
+    <meta name="description" content="Politique de confidentialité de l'application CourrierCode">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --bg-dark: #0f0f1a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(102, 126, 234, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(118, 75, 162, 0.2) 0%, transparent 50%),
+                var(--bg-dark);
+            z-index: -1;
+        }
+
+        header {
+            padding: 1.5rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .update-date {
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            color: var(--text-secondary);
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(17, 153, 142, 0.2), rgba(56, 239, 125, 0.1));
+            border: 1px solid rgba(56, 239, 125, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box p {
+            color: #4ade80;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .emoji-icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        footer {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        a {
+            color: var(--primary);
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .content-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <header>
+        <a href="index.html" class="back-link">← Retour à l'accueil</a>
+    </header>
+
+    <main>
+        <h1>Politique de Confidentialité</h1>
+        <p class="update-date">Dernière mise à jour : 15 janvier 2026</p>
+
+        <div class="content-card">
+            <h2><span class="emoji-icon">🛡️</span> Notre Engagement</h2>
+            <p>CourrierCode est conçu avec la confidentialité comme priorité absolue. Nous croyons que vos données vous appartiennent, et uniquement à vous.</p>
+
+            <div class="highlight-box">
+                <p>✅ CourrierCode ne collecte, ne stocke et ne transmet AUCUNE donnée personnelle.</p>
+            </div>
+
+            <h2><span class="emoji-icon">📱</span> Fonctionnement de l'Application</h2>
+            <p>CourrierCode fonctionne entièrement hors ligne sur votre appareil :</p>
+            <ul>
+                <li>L'encodage et le décodage des messages se font localement</li>
+                <li>Aucune connexion internet n'est requise</li>
+                <li>Aucune donnée n'est envoyée à des serveurs externes</li>
+                <li>Les messages ne sont pas stockés dans l'application</li>
+            </ul>
+
+            <h2><span class="emoji-icon">🔐</span> Données Collectées</h2>
+            <p><strong>Aucune.</strong></p>
+            <p>Nous ne collectons aucune information vous concernant :</p>
+            <ul>
+                <li>Pas de données personnelles</li>
+                <li>Pas d'identifiants</li>
+                <li>Pas de suivi d'utilisation</li>
+                <li>Pas d'analytics</li>
+                <li>Pas de cookies</li>
+                <li>Pas de publicités</li>
+            </ul>
+
+            <h2><span class="emoji-icon">💾</span> Stockage Local</h2>
+            <p>Les seules données stockées sur votre appareil sont :</p>
+            <ul>
+                <li>Vos préférences d'interface (si applicable)</li>
+                <li>Les tables aléatoires que vous générez (stockées localement uniquement)</li>
+            </ul>
+            <p>Ces données restent exclusivement sur votre appareil et ne sont jamais transmises.</p>
+
+            <h2><span class="emoji-icon">🌐</span> Services Tiers</h2>
+            <p>CourrierCode n'intègre aucun service tiers :</p>
+            <ul>
+                <li>Pas de SDK d'analyse</li>
+                <li>Pas de réseaux publicitaires</li>
+                <li>Pas de services de suivi</li>
+                <li>Pas de partage avec des tiers</li>
+            </ul>
+
+            <h2><span class="emoji-icon">👶</span> Protection des Enfants</h2>
+            <p>Notre application est adaptée à tous les âges. Puisque nous ne collectons aucune donnée, nous ne collectons pas non plus de données concernant les enfants.</p>
+
+            <h2><span class="emoji-icon">📧</span> Contact</h2>
+            <p>Pour toute question concernant cette politique de confidentialité, vous pouvez nous contacter à :</p>
+            <p><a href="mailto:bob.oulhen@gmail.com">bob.oulhen@gmail.com</a></p>
+
+            <h2><span class="emoji-icon">🔄</span> Modifications</h2>
+            <p>En cas de modification de cette politique, la date de mise à jour sera actualisée en haut de cette page. Nous vous encourageons à consulter régulièrement cette page.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 CourrierCode. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>

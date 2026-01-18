@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courrier Codé</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📧 Courrier Codé</h1>
+
+        <!-- Section Encodeur -->
+        <div class="section">
+            <h2>✍️ Encodeur</h2>
+            <div class="mode-securite">
+                <label class="toggle-container">
+                    <input type="checkbox" id="modeJour" checked>
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">🔐 Mode jour (codage variable)</span>
+                </label>
+                <div id="jourActuel" class="jour-info"></div>
+            </div>
+            <div class="mode-securite">
+                <label class="toggle-container">
+                    <input type="checkbox" id="modeMelange">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">🔀 Mélanger les mots</span>
+                </label>
+            </div>
+            <textarea id="texteOriginal" placeholder="Écrivez votre message ici..."></textarea>
+            <div id="melangeBox" class="result-box melange-box" style="display: none;">
+                <label>🔀 Mots mélangés :</label>
+                <div id="resultatMelange" class="result melange-result"></div>
+                <div class="buttons">
+                    <button id="btnRemelanger" class="btn btn-shuffle">🎲 Remélanger</button>
+                    <button id="btnCopierMelange" class="btn btn-success">📋 Copier</button>
+                </div>
+            </div>
+            <div class="result-box">
+                <label>Message codé :</label>
+                <div id="resultatCode" class="result"></div>
+            </div>
+            <div class="buttons">
+                <button id="btnInverser" class="btn btn-primary">🔄 Inverser l'ordre</button>
+                <button id="btnCopier" class="btn btn-secondary">📋 Copier</button>
+                <button id="btnEffacer" class="btn btn-danger">🗑️ Effacer</button>
+            </div>
+            <div class="result-box">
+                <label>Message codé inversé :</label>
+                <div id="resultatInverse" class="result"></div>
+            </div>
+        </div>
+
+        <!-- Section Décodeur -->
+        <div class="section">
+            <h2>🔍 Décodeur</h2>
+            <div class="mode-securite">
+                <label class="toggle-container">
+                    <input type="checkbox" id="modeJourDecode" checked>
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">🔐 Mode jour</span>
+                </label>
+                <select id="jourDecode" class="jour-select">
+                    <option value="auto">📅 Aujourd'hui</option>
+                    <option value="1">Lundi</option>
+                    <option value="2">Mardi</option>
+                    <option value="3">Mercredi</option>
+                    <option value="4">Jeudi</option>
+                    <option value="5">Vendredi</option>
+                    <option value="6">Samedi</option>
+                    <option value="0">Dimanche</option>
+                </select>
+            </div>
+            <textarea id="texteCrypte" placeholder="Collez le message codé ici..."></textarea>
+            <div class="buttons">
+                <button id="btnColler" class="btn btn-success">📋 Coller</button>
+                <button id="btnDecoder" class="btn btn-primary">🔓 Décoder</button>
+                <button id="btnDecoderInverse" class="btn btn-secondary">🔄 Décoder (inversé)</button>
+                <button id="btnDecoderSmart" class="btn btn-smart">🧠 Décoder intelligent</button>
+                <button id="btnEffacerDecodeur" class="btn btn-danger">🗑️ Effacer</button>
+            </div>
+            <div class="result-box">
+                <label>Message décodé : <span class="edit-hint">(cliquez pour éditer)</span></label>
+                <div id="resultatDecode" class="result editable" contenteditable="true" spellcheck="false"></div>
+                <button id="btnCopierDecode" class="btn btn-success" style="margin-top: 10px;">📋 Copier le message</button>
+            </div>
+        </div>
+
+        <!-- Tableau de référence (Coffre-fort) -->
+        <div class="section reference">
+            <h2>🔐 Table de référence</h2>
+            <div id="coffreFort" class="coffre-fort">
+                <div class="coffre-lock">
+                    <span class="lock-icon">🔒</span>
+                    <p>Entrez le code secret pour accéder à la table</p>
+                    <div class="code-input">
+                        <input type="password" id="codeSecret" placeholder="Code secret" maxlength="10">
+                        <button id="btnDeverrouiller" class="btn btn-primary">Déverrouiller</button>
+                    </div>
+                    <p id="erreurCode" class="erreur-code"></p>
+                    <div class="code-config">
+                        <button id="btnChangerCode" class="btn btn-secondary btn-small">⚙️ Changer le code</button>
+                    </div>
+                </div>
+                <div id="tableContainer" class="table-container hidden">
+                    <div class="table-controls">
+                        <button id="btnVerrouiller" class="btn btn-danger btn-small">🔒 Verrouiller</button>
+                        <button id="btnChangerCodeInterne" class="btn btn-secondary btn-small">⚙️ Changer le code</button>
+                    </div>
+                    <div id="tableReference" class="table-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - CourrierCode</title>
+    <meta name="description" content="Centre d'aide et support pour l'application CourrierCode">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --success: #11998e;
+            --success-light: #38ef7d;
+            --bg-dark: #0f0f1a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(102, 126, 234, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(118, 75, 162, 0.2) 0%, transparent 50%),
+                var(--bg-dark);
+            z-index: -1;
+        }
+
+        header {
+            padding: 1.5rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s, border-color 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* FAQ Section */
+        .faq-section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .faq-arrow {
+            transition: transform 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .faq-item.open .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .faq-answer-content p {
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-answer-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            margin-top: 3rem;
+        }
+
+        .tips-section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .tip-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .tip-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .tip-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        footer {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        a {
+            color: var(--primary);
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .contact-section {
+                grid-template-columns: 1fr;
+            }
+
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <header>
+        <a href="index.html" class="back-link">← Retour à l'accueil</a>
+    </header>
+
+    <main>
+        <h1>Centre d'aide</h1>
+        <p class="subtitle">Comment pouvons-nous vous aider ?</p>
+
+        <div class="contact-section">
+            <a href="mailto:bob.oulhen@gmail.com" class="contact-card">
+                <div class="contact-icon">📧</div>
+                <h3>Email</h3>
+                <p>bob.oulhen@gmail.com</p>
+            </a>
+            <a href="mailto:bob.oulhen@gmail.com?subject=Bug Report - CourrierCode" class="contact-card">
+                <div class="contact-icon">🐛</div>
+                <h3>Signaler un bug</h3>
+                <p>Nous aider à améliorer l'app</p>
+            </a>
+        </div>
+
+        <section class="faq-section">
+            <h2>Questions fréquentes</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Comment encoder un message ?</span>
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>1. Ouvrez l'onglet "Encodeur"</p>
+                        <p>2. Tapez votre message dans la zone de texte</p>
+                        <p>3. Le code apparaît automatiquement en dessous</p>
+                        <p>4. Appuyez sur "Copier" pour copier le code</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Qu'est-ce que le code secret ?</span>
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Le code secret est un mot de passe partagé entre vous et votre destinataire.</p>
+                        <p>Il modifie l'encodage de manière unique. Sans connaître ce code secret, il est impossible de décoder correctement le message.</p>
+                        <p>Utilisez le même code secret pour encoder et décoder.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Pourquoi le décodage donne des résultats étranges ?</span>
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Vérifiez les points suivants :</p>
+                        <p>• Le code a été copié intégralement (avec le marqueur ★)</p>
+                        <p>• Le même code secret est utilisé à l'encodage et au décodage</p>
+                        <p>• Si une table aléatoire a été utilisée, elle doit être identique des deux côtés</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Comment fonctionne la table aléatoire ?</span>
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>La table aléatoire remplace la table de correspondance standard par une table unique.</p>
+                        <p>Pour l'utiliser :</p>
+                        <p>1. Générez une table et notez le code à 6 chiffres</p>
+                        <p>2. Partagez ce code avec votre correspondant</p>
+                        <p>3. Vous et votre correspondant devez entrer le même code pour encoder/décoder</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>L'application nécessite-t-elle une connexion internet ?</span>
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Non ! CourrierCode fonctionne entièrement hors ligne.</p>
+                        <p>Aucune connexion internet n'est nécessaire pour encoder ou décoder vos messages.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Mes messages sont-ils sécurisés ?</span>
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Oui ! Vos messages sont traités uniquement sur votre appareil.</p>
+                        <p>Aucune donnée n'est envoyée sur internet ou stockée sur des serveurs externes.</p>
+                        <p>Nous ne collectons aucune information personnelle.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tips-section">
+            <h2>💡 Astuces</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h4>🔒 Sécurité maximale</h4>
+                    <p>Combinez code secret + table aléatoire pour un encodage ultra-sécurisé.</p>
+                </div>
+                <div class="tip-card">
+                    <h4>📋 Copie rapide</h4>
+                    <p>Appuyez longuement sur le code pour le copier instantanément.</p>
+                </div>
+                <div class="tip-card">
+                    <h4>⭐ Marqueur de jour</h4>
+                    <p>Le symbole ★ suivi d'un nombre indique le jour d'encodage.</p>
+                </div>
+                <div class="tip-card">
+                    <h4>📖 Documentation</h4>
+                    <p>Consultez l'onglet Aide dans l'app pour plus de détails.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 CourrierCode. Tous droits réservés.</p>
+        <p style="margin-top: 0.5rem;"><a href="privacy.html">Politique de confidentialité</a></p>
+    </footer>
+
+    <script>
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                item.classList.toggle('open');
+            });
+        });
+    </script>
+</body>
+</html>
