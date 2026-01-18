@@ -18,6 +18,9 @@
 		AAA00007 /* CourrierCodeur.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00017 /* CourrierCodeur.swift */; };
 		AAA00008 /* Dictionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00018 /* Dictionnaire.swift */; };
 		AAA0000A /* TableAleatoire.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00021 /* TableAleatoire.swift */; };
+		AAA0000D /* UsageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00024 /* UsageManager.swift */; };
+		AAA0000E /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00025 /* StoreManager.swift */; };
+		AAA0000F /* PremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00026 /* PremiumView.swift */; };
 		AAA00009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AAA00019 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +37,9 @@
 		AAA00021 /* TableAleatoire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableAleatoire.swift; sourceTree = "<group>"; };
 		AAA00022 /* DocumentationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentationView.swift; sourceTree = "<group>"; };
 		AAA00023 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		AAA00024 /* UsageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageManager.swift; sourceTree = "<group>"; };
+		AAA00025 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
+		AAA00026 /* PremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumView.swift; sourceTree = "<group>"; };
 		AAA00019 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AAA00020 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -87,6 +93,7 @@
 				AAA00014 /* DecodeurView.swift */,
 				AAA00015 /* TableReferenceView.swift */,
 				AAA00022 /* DocumentationView.swift */,
+				AAA00026 /* PremiumView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -105,6 +112,8 @@
 				AAA00017 /* CourrierCodeur.swift */,
 				AAA00018 /* Dictionnaire.swift */,
 				AAA00021 /* TableAleatoire.swift */,
+				AAA00024 /* UsageManager.swift */,
+				AAA00025 /* StoreManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -197,6 +206,9 @@
 				AAA00007 /* CourrierCodeur.swift in Sources */,
 				AAA00008 /* Dictionnaire.swift in Sources */,
 				AAA0000A /* TableAleatoire.swift in Sources */,
+				AAA0000D /* UsageManager.swift in Sources */,
+				AAA0000E /* StoreManager.swift in Sources */,
+				AAA0000F /* PremiumView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
