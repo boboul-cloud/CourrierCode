@@ -12,16 +12,16 @@
 		AAA00003 /* EncodeurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00013 /* EncodeurView.swift */; };
 		AAA00004 /* DecodeurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00014 /* DecodeurView.swift */; };
 		AAA00005 /* TableReferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00015 /* TableReferenceView.swift */; };
-		AAA0000B /* DocumentationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00022 /* DocumentationView.swift */; };
-		AAA0000C /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00023 /* AppTheme.swift */; };
 		AAA00006 /* ResultBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00016 /* ResultBox.swift */; };
 		AAA00007 /* CourrierCodeur.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00017 /* CourrierCodeur.swift */; };
 		AAA00008 /* Dictionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00018 /* Dictionnaire.swift */; };
+		AAA00009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AAA00019 /* Assets.xcassets */; };
 		AAA0000A /* TableAleatoire.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00021 /* TableAleatoire.swift */; };
+		AAA0000B /* DocumentationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00022 /* DocumentationView.swift */; };
+		AAA0000C /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00023 /* AppTheme.swift */; };
 		AAA0000D /* UsageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00024 /* UsageManager.swift */; };
 		AAA0000E /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00025 /* StoreManager.swift */; };
 		AAA0000F /* PremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00026 /* PremiumView.swift */; };
-		AAA00009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AAA00019 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,14 +34,15 @@
 		AAA00016 /* ResultBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultBox.swift; sourceTree = "<group>"; };
 		AAA00017 /* CourrierCodeur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourrierCodeur.swift; sourceTree = "<group>"; };
 		AAA00018 /* Dictionnaire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionnaire.swift; sourceTree = "<group>"; };
+		AAA00019 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AAA00020 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AAA00021 /* TableAleatoire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableAleatoire.swift; sourceTree = "<group>"; };
 		AAA00022 /* DocumentationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentationView.swift; sourceTree = "<group>"; };
 		AAA00023 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		AAA00024 /* UsageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageManager.swift; sourceTree = "<group>"; };
 		AAA00025 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		AAA00026 /* PremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumView.swift; sourceTree = "<group>"; };
-		AAA00019 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AAA00020 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BF397EEC2F1D612F00443C58 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +59,7 @@
 		AAA00040 = {
 			isa = PBXGroup;
 			children = (
+				BF397EEC2F1D612F00443C58 /* Products.storekit */,
 				AAA00041 /* CourrierCode-iOS */,
 				AAA00042 /* Products */,
 			);
