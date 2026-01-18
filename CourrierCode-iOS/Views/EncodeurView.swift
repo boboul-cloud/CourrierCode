@@ -7,8 +7,11 @@ struct EncodeurView: View {
     @State private var showInverse = false
     @State private var showMelange = false
     @State private var texteMelange = ""
+    @State private var showPremiumView = false
+    @State private var showLimiteAtteinte = false
     
     @AppStorage("codeTableSauvegarde") private var codeTable = ""
+    @ObservedObject private var usageManager = UsageManager.shared
     
     private let codeur = CourrierCodeur()
     
@@ -38,30 +41,78 @@ struct EncodeurView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 24) {
-                    headerView
-                    statusIndicators
-                    codeSecretSection
-                    inputSection
-                    melangeTexteSection
-                    resultSection
-                    actionButtons
+            ZStack {
+                ScrollView {
+                    VStack(spacing: 24) {
+                        headerView
+                        usageBadge
+                        statusIndicators
+                        codeSecretSection
+                        inputSection
+                        melangeTexteSection
+                        resultSection
+                        actionButtons
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 30)
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 30)
+                .background(Color(.systemGroupedBackground))
+                
+                // Overlay si limite atteinte
+                if showLimiteAtteinte {
+                    LimiteAtteinteView(showPremiumView: $showPremiumView)
+                        .transition(.opacity)
+                }
             }
-            .background(Color(.systemGroupedBackground))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("Encodeur")
                         .font(.headline)
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { showPremiumView = true }) {
+                        Image(systemName: usageManager.isPremium ? "crown.fill" : "crown")
+                            .foregroundColor(usageManager.isPremium ? .yellow : .gray)
+                    }
+                }
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button("OK") { hideKeyboard() }
                 }
+            }
+            .sheet(isPresented: $showPremiumView) {
+                PremiumView()
+            }
+        }
+    }
+    
+    // Badge d'utilisation
+    private var usageBadge: some View {
+        Group {
+            if !usageManager.isPremium {
+                HStack {
+                    Image(systemName: "chart.bar.fill")
+                        .foregroundColor(.orange)
+                    Text("\(usageManager.remainingUses)/\(UsageManager.limiteFreeParJour) utilisations restantes")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    Button("Premium") {
+                        showPremiumView = true
+                    }
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(LinearGradient(colors: [Color(hex: "f093fb"), Color(hex: "f5576c")], startPoint: .leading, endPoint: .trailing))
+                    .cornerRadius(8)
+                }
+                .padding(12)
+                .background(Color(.systemBackground))
+                .cornerRadius(12)
+                .shadow(color: .black.opacity(0.05), radius: 5)
             }
         }
     }
@@ -296,6 +347,18 @@ struct EncodeurView: View {
     }
     
     private func copyToClipboard(_ text: String) {
+        // Vérifier si l'utilisateur peut encore utiliser
+        guard usageManager.canUse else {
+            withAnimation {
+                showLimiteAtteinte = true
+            }
+            return
+        }
+        
+        // Enregistrer l'utilisation
+        usageManager.recordUsage()
+        
+        // Copier dans le presse-papier
         UIPasteboard.general.string = text
     }
 }

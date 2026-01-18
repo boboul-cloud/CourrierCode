@@ -7,7 +7,15 @@
 - **Catégorie principale** : Utilitaires
 - **Catégorie secondaire** : Divertissement
 - **Classification d'âge** : 4+
-- **Prix** : Gratuit
+- **Prix** : Gratuit (avec achat intégré Premium)
+
+## Achat intégré
+
+- **Nom** : CourrierCode Premium
+- **ID produit** : com.courriercode.premium
+- **Type** : Non-consommable (achat unique)
+- **Prix suggéré** : 1,99 € / $1.99
+- **Description** : Débloquez un accès illimité aux encodages et décodages. Plus aucune limite quotidienne !
 
 ---
 
