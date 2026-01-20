@@ -38,12 +38,13 @@
 |----------------|-------------|
 | 🔐 **Encodage** | Transformez n'importe quel texte en séquence de chiffres |
 | 🔍 **Décodage** | Décryptez automatiquement les messages codés |
+| �️ **Encodage d'images** | Transformez vos images en fichiers JSON codés |
 | 📅 **Décalage quotidien** | Chaque jour utilise un décalage différent |
 | 🔑 **Code secret** | Ajoutez une couche de sécurité supplémentaire |
 | 🎲 **Table aléatoire** | Générez une table de correspondance personnalisée |
 | 🔄 **Message inversé** | Option pour inverser le message final |
 | 🌙 **Mode sombre** | Interface adaptée à vos préférences |
-| 📖 **Documentation** | Guide intégré dans l'application |
+| 📖 **Documentation** | Guide intégré avec images zoomables |
 
 ---
 

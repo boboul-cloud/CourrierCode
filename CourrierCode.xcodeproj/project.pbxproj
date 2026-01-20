@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AAA00027 /* ImageEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00028 /* ImageEncoder.swift */; };
+		AAA00029 /* ImageEncoderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA0002A /* ImageEncoderView.swift */; };
 		AAA00001 /* CourrierCodeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00011 /* CourrierCodeApp.swift */; };
 		AAA00002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00012 /* ContentView.swift */; };
 		AAA00003 /* EncodeurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00013 /* EncodeurView.swift */; };
@@ -43,6 +45,8 @@
 		AAA00025 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		AAA00026 /* PremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumView.swift; sourceTree = "<group>"; };
 		BF397EEC2F1D612F00443C58 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
+		AAA00028 /* ImageEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEncoder.swift; sourceTree = "<group>"; };
+		AAA0002A /* ImageEncoderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEncoderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +100,7 @@
 				AAA00015 /* TableReferenceView.swift */,
 				AAA00022 /* DocumentationView.swift */,
 				AAA00026 /* PremiumView.swift */,
+				AAA0002A /* ImageEncoderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -116,6 +121,7 @@
 				AAA00021 /* TableAleatoire.swift */,
 				AAA00024 /* UsageManager.swift */,
 				AAA00025 /* StoreManager.swift */,
+				AAA00028 /* ImageEncoder.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -211,6 +217,8 @@
 				AAA0000D /* UsageManager.swift in Sources */,
 				AAA0000E /* StoreManager.swift in Sources */,
 				AAA0000F /* PremiumView.swift in Sources */,
+				AAA00027 /* ImageEncoder.swift in Sources */,
+				AAA00029 /* ImageEncoderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,7 +354,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "CourrierCode-iOS/Info.plist";
@@ -360,7 +368,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.courriercode.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -375,7 +383,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "CourrierCode-iOS/Info.plist";
@@ -389,7 +397,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.courriercode.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

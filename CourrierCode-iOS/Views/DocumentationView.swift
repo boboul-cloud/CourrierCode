@@ -1,7 +1,14 @@
 import SwiftUI
 
+// Wrapper pour rendre String identifiable
+struct ImageItem: Identifiable {
+    let id = UUID()
+    let name: String
+}
+
 struct DocumentationView: View {
     @State private var expandedSections: Set<String> = []
+    @State private var selectedImageItem: ImageItem? = nil
     
     var body: some View {
         NavigationStack {
@@ -38,6 +45,15 @@ struct DocumentationView: View {
                     }
                     
                     docSection(
+                        id: "acces",
+                        title: "Accès à la table",
+                        icon: "lock.fill",
+                        color: .orange
+                    ) {
+                        accesTableSectionContent
+                    }
+                    
+                    docSection(
                         id: "table",
                         title: "Table aléatoire",
                         icon: "shuffle",
@@ -65,6 +81,15 @@ struct DocumentationView: View {
                     }
                     
                     docSection(
+                        id: "image",
+                        title: "Codage d'images",
+                        icon: "photo.circle.fill",
+                        color: Color(hex: "667eea")
+                    ) {
+                        imageSectionContent
+                    }
+                    
+                    docSection(
                         id: "securite",
                         title: "Conseils de sécurité",
                         icon: "shield.checkered",
@@ -86,6 +111,9 @@ struct DocumentationView: View {
                         .font(.headline)
                 }
             }
+        }
+        .sheet(item: $selectedImageItem) { item in
+            FullScreenImageView(imageName: item.name)
         }
     }
     
@@ -287,6 +315,40 @@ struct DocumentationView: View {
         }
     }
     
+    private var accesTableSectionContent: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("La table de correspondance est protégée par un code d'accès pour empêcher les regards indiscrets.")
+                .foregroundColor(.secondary)
+            
+            HStack {
+                Image(systemName: "info.circle.fill")
+                    .foregroundColor(.orange)
+                Text("Code par défaut : 1234")
+                    .font(.callout)
+                    .fontWeight(.semibold)
+            }
+            .padding(12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.orange.opacity(0.1))
+            .cornerRadius(10)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                DocBullet(text: "Ce code protège l'accès à la table, pas vos messages")
+                DocBullet(text: "Vous pouvez le modifier à tout moment")
+                DocBullet(text: "Pensez à le changer dès la première utilisation")
+            }
+            
+            HStack(spacing: 8) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundColor(.orange)
+                Text("Changez ce code par défaut pour plus de sécurité !")
+                    .font(.caption)
+                    .foregroundColor(.orange)
+            }
+            .padding(.top, 4)
+        }
+    }
+    
     private var tableSectionContent: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("La table aléatoire mélange l'ordre des lettres pour une sécurité maximale.")
@@ -365,6 +427,111 @@ struct DocumentationView: View {
         }
     }
     
+    // MARK: - Section Image
+    private var imageSectionContent: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Transformez vos images en fichiers JSON codés, illisibles sans l'application.")
+                .foregroundColor(.secondary)
+            
+            // Principe
+            Text("Principe")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                DocBullet(text: "Chaque pixel (couleur RGB) est converti en codes numériques")
+                DocBullet(text: "Le décalage du jour et le code secret s'appliquent")
+                DocBullet(text: "L'image est exportée en fichier JSON")
+            }
+            
+            Divider()
+            
+            // Encoder une image
+            Text("Encoder une image")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                DocStep(number: 1, text: "Aller dans l'onglet Image → Encoder")
+                DocStep(number: 2, text: "Sélectionner une image depuis votre photothèque")
+                DocStep(number: 3, text: "Ajuster la taille (plus petit = fichier plus léger)")
+                DocStep(number: 4, text: "Optionnel : ajouter un code secret")
+                DocStep(number: 5, text: "Appuyer sur \"Encoder l'image\"")
+                DocStep(number: 6, text: "Exporter le fichier JSON via Messages, Mail, AirDrop...")
+            }
+            
+            Divider()
+            
+            // Décoder une image
+            Text("Décoder une image")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            
+            Text("Vous avez reçu un fichier JSON mystérieux ? Voici comment révéler l'image cachée :")
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .padding(.bottom, 4)
+            
+            VStack(alignment: .leading, spacing: 12) {
+                DocStep(number: 1, text: "Ouvrez le message contenant la pièce jointe JSON")
+                DocStep(number: 2, text: "Touchez la pièce jointe pour l'ouvrir")
+                
+                // Image tutoriel 1 - Aperçu JSON
+                ZoomableTutorialImage(imageName: "TutorialJSONPreview", selectedImageItem: $selectedImageItem)
+                
+                DocStep(number: 3, text: "Appuyez sur le bouton de partage (en bas à droite)")
+                DocStep(number: 4, text: "Sélectionnez \"Courrier Codé\" dans la liste des apps")
+                
+                // Image tutoriel 2 - Share Sheet
+                ZoomableTutorialImage(imageName: "TutorialShareSheet", selectedImageItem: $selectedImageItem)
+                
+                DocStep(number: 5, text: "Entrez le code secret si l'image en nécessite un")
+                DocStep(number: 6, text: "Appuyez sur \"Décoder\" et admirez le résultat !")
+                DocStep(number: 7, text: "Sauvegardez l'image dans votre photothèque")
+            }
+            
+            // Astuce favori
+            HStack(alignment: .top, spacing: 10) {
+                Image(systemName: "star.fill")
+                    .foregroundColor(.yellow)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Astuce")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                    Text("Pour un accès rapide, maintenez l'icône \"Courrier Codé\" dans la feuille de partage et choisissez \"Ajouter aux favoris\". L'app apparaîtra toujours en première ligne !")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding(12)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.yellow.opacity(0.1))
+            )
+            
+            Divider()
+            
+            // Info importante
+            HStack(alignment: .top, spacing: 10) {
+                Image(systemName: "info.circle.fill")
+                    .foregroundColor(Color(hex: "667eea"))
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Taille recommandée")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                    Text("Pour des fichiers légers, utilisez 30-50 pixels de largeur. L'image sera pixelisée mais parfaitement reconnaissable.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding(12)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(hex: "667eea").opacity(0.1))
+            )
+        }
+    }
+    
     private var footerView: some View {
         VStack(spacing: 6) {
             Text("CourrierCode v1.0")
@@ -433,6 +600,83 @@ struct DocSecurityTip: View {
             RoundedRectangle(cornerRadius: 10)
                 .fill((isPositive ? Color.green : Color.red).opacity(0.1))
         )
+    }
+}
+
+// MARK: - Zoomable Tutorial Image
+struct ZoomableTutorialImage: View {
+    let imageName: String
+    @Binding var selectedImageItem: ImageItem?
+    
+    var body: some View {
+        Button(action: {
+            selectedImageItem = ImageItem(name: imageName)
+        }) {
+            ZStack(alignment: .bottomTrailing) {
+                Image(imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxHeight: 200)
+                    .cornerRadius(12)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                    )
+                
+                // Icône de zoom
+                Image(systemName: "plus.magnifyingglass")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(.white)
+                    .padding(8)
+                    .background(Color.black.opacity(0.6))
+                    .clipShape(Circle())
+                    .padding(8)
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+        .padding(.vertical, 8)
+    }
+}
+
+// MARK: - Full Screen Image View
+struct FullScreenImageView: View {
+    let imageName: String
+    @Environment(\.dismiss) private var dismiss
+    @State private var scale: CGFloat = 1.0
+    
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                Color.black.ignoresSafeArea()
+                
+                Image(imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .scaleEffect(scale)
+                    .onTapGesture(count: 2) {
+                        withAnimation(.spring()) {
+                            scale = scale > 1 ? 1 : 2.5
+                        }
+                    }
+                    .gesture(
+                        MagnificationGesture()
+                            .onChanged { value in
+                                scale = min(max(value, 1), 4)
+                            }
+                    )
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 24))
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundColor(.white)
+                    }
+                }
+            }
+            .toolbarBackground(.hidden, for: .navigationBar)
+        }
     }
 }
 

@@ -46,13 +46,15 @@ Pour une sécurité maximale, générez une table de correspondance personnalis�
 ✨ **FONCTIONNALITÉS**
 • Encodage instantané de texte en chiffres
 • Décodage intelligent avec détection automatique
+• Encodage d'images en fichiers JSON codés
+• Import facile via la feuille de partage iOS
 • Décalage variable selon le jour
 • Code secret optionnel
 • Table de correspondance aléatoire
 • Message inversé pour plus de discrétion
 • Interface moderne et intuitive
 • Mode sombre supporté
-• Documentation intégrée
+• Documentation intégrée avec images zoomables
 
 🎯 **PARFAIT POUR**
 • Jeux de piste et chasses au trésor
@@ -92,13 +94,15 @@ For maximum security, generate a custom correspondence table. Share the 6-digit 
 ✨ **FEATURES**
 • Instant text-to-number encoding
 • Smart decoding with automatic detection
+• Image encoding to coded JSON files
+• Easy import via iOS share sheet
 • Variable offset based on day
 • Optional secret code
 • Random correspondence table
 • Reversed message for discretion
 • Modern and intuitive interface
 • Dark mode supported
-• Built-in documentation
+• Built-in documentation with zoomable images
 
 🎯 **PERFECT FOR**
 • Scavenger hunts and treasure hunts
@@ -126,13 +130,15 @@ code,secret,message,encrypt,cipher,encode,decode,spy,mystery,game
 ### Version 1.0 (Janvier 2026)
 Première version de CourrierCode !
 
-• Encodage et décodage de messages
+• Encodage et décodage de messages texte
+• Encodage et décodage d'images (Premium)
+• Import de fichiers JSON via la feuille de partage
 • Décalage journalier automatique
 • Code secret optionnel
 • Table de correspondance aléatoire
 • Détection intelligente des mots
 • Interface moderne avec animations
-• Documentation intégrée
+• Documentation intégrée avec images zoomables
 
 ---
 

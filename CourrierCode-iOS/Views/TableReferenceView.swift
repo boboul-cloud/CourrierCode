@@ -89,6 +89,11 @@ struct TableReferenceView: View {
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
+                
+                Text("Code par défaut : 1234")
+                    .font(.caption)
+                    .foregroundColor(.secondary.opacity(0.8))
+                    .padding(.top, 4)
             }
             
             GlassCard {

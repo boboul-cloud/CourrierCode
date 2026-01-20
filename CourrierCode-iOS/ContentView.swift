@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab = 0
+    @EnvironmentObject var appState: AppState
     
     init() {
         // Personnaliser l'apparence de la TabBar
@@ -37,19 +38,32 @@ struct ContentView: View {
                 }
                 .tag(1)
             
+            ImageEncoderView()
+                .tabItem {
+                    Image(systemName: "photo.circle.fill")
+                    Text("Image")
+                }
+                .tag(2)
+            
             TableReferenceView()
                 .tabItem {
                     Image(systemName: "tablecells.badge.ellipsis")
                     Text("Table")
                 }
-                .tag(2)
+                .tag(3)
             
             DocumentationView()
                 .tabItem {
                     Image(systemName: "book.circle.fill")
                     Text("Aide")
                 }
-                .tag(3)
+                .tag(4)
+        }
+        .onChange(of: appState.shouldNavigateToImageDecoder) { _, shouldNavigate in
+            if shouldNavigate {
+                selectedTab = 2  // Aller à l'onglet Image
+                appState.shouldNavigateToImageDecoder = false
+            }
         }
         .tint(Color(hex: "667eea"))
     }
@@ -57,4 +71,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(AppState.shared)
 }
