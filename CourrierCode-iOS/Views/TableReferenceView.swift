@@ -1,4 +1,5 @@
 import SwiftUI
+import LocalAuthentication
 
 struct TableReferenceView: View {
     @State private var codeEntre = ""
@@ -14,6 +15,7 @@ struct TableReferenceView: View {
     @State private var confirmationCode = ""
     @State private var erreurChangement = ""
     @State private var showCodeChanged = false
+    @State private var biometricAvailable = false
     
     @AppStorage("codeSecret") private var codeSecret = "1234"
     @AppStorage("codeTableSauvegarde") private var codeTableSauvegarde = ""
@@ -53,6 +55,7 @@ struct TableReferenceView: View {
                 changerCodeSheet
             }
             .onAppear {
+                checkBiometricAvailability()
                 if !codeTableSauvegarde.isEmpty {
                     codeTableAleatoire = codeTableSauvegarde
                     TableAleatoire.shared.genererTable(avecCode: codeTableSauvegarde)
@@ -130,6 +133,31 @@ struct TableReferenceView: View {
                         action: deverrouiller,
                         fullWidth: true
                     )
+                    
+                    if biometricAvailable {
+                        Button(action: deverrouillerAvecFaceID) {
+                            HStack(spacing: 10) {
+                                Image(systemName: "faceid")
+                                    .font(.title2)
+                                Text("Utiliser Face ID")
+                                    .fontWeight(.medium)
+                            }
+                            .foregroundColor(Color(hex: "667eea"))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .background(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .stroke(
+                                        LinearGradient(
+                                            colors: [Color(hex: "667eea"), Color(hex: "764ba2")],
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        ),
+                                        lineWidth: 2
+                                    )
+                            )
+                        }
+                    }
                 }
             }
             .padding(.horizontal, 30)
@@ -379,6 +407,37 @@ struct TableReferenceView: View {
     private func verrouiller() {
         withAnimation {
             estDeverrouille = false
+        }
+    }
+    
+    private func checkBiometricAvailability() {
+        let context = LAContext()
+        var error: NSError?
+        biometricAvailable = context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+    }
+    
+    private func deverrouillerAvecFaceID() {
+        let context = LAContext()
+        context.localizedCancelTitle = "Annuler"
+        
+        context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics,
+                               localizedReason: "Déverrouillez pour accéder à la table de référence") { success, error in
+            DispatchQueue.main.async {
+                if success {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                        showUnlockAnimation = true
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation {
+                            estDeverrouille = true
+                            showUnlockAnimation = false
+                        }
+                    }
+                    self.erreur = ""
+                } else {
+                    self.erreur = "Authentification échouée"
+                }
+            }
         }
     }
     

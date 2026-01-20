@@ -81,6 +81,15 @@ struct DocumentationView: View {
                     }
                     
                     docSection(
+                        id: "carnet",
+                        title: "Carnet & Face ID",
+                        icon: "faceid",
+                        color: Color(hex: "667eea")
+                    ) {
+                        carnetFaceIDSectionContent
+                    }
+                    
+                    docSection(
                         id: "image",
                         title: "Codage d'images",
                         icon: "photo.circle.fill",
@@ -411,6 +420,104 @@ struct DocumentationView: View {
                 Image(systemName: "lightbulb.fill")
                     .foregroundColor(.yellow)
                 Text("Utilisez \"Inverser\" si le message a été envoyé à l'envers.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+    
+    // MARK: - Section Carnet & Face ID
+    private var carnetFaceIDSectionContent: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Simplifiez le décodage grâce à Face ID et votre carnet de correspondants.")
+                .foregroundColor(.secondary)
+            
+            // Concept
+            Divider()
+            Text("Le concept")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                DocBullet(text: "Vous êtes le propriétaire du téléphone (Face ID vous authentifie)")
+                DocBullet(text: "Votre carnet contient vos correspondants et leurs codes")
+                DocBullet(text: "Quand vous recevez un message, l'app trouve automatiquement l'expéditeur")
+            }
+            
+            // Ajouter un correspondant
+            Divider()
+            Text("Ajouter un correspondant")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                DocStep(number: 1, text: "Aller dans Autre → Carnet de codes")
+                DocStep(number: 2, text: "S'authentifier avec Face ID")
+                DocStep(number: 3, text: "Appuyer sur + pour ajouter")
+                DocStep(number: 4, text: "Entrer le nom du correspondant")
+                DocStep(number: 5, text: "Entrer son code secret (celui que vous avez convenu ensemble)")
+                DocStep(number: 6, text: "Entrer son code table (6 chiffres, si utilisé)")
+            }
+            
+            HStack(spacing: 8) {
+                Image(systemName: "info.circle.fill")
+                    .foregroundColor(.blue)
+                Text("Chaque correspondant peut avoir des codes différents.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            // Décoder avec Face ID
+            Divider()
+            Text("Décoder avec Face ID")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                DocStep(number: 1, text: "Aller dans l'onglet Décoder")
+                DocStep(number: 2, text: "Activer \"Décodage automatique\"")
+                DocStep(number: 3, text: "Coller le message codé")
+                DocStep(number: 4, text: "Appuyer sur \"Décoder avec Face ID\"")
+                DocStep(number: 5, text: "L'app teste tous vos correspondants")
+                DocStep(number: 6, text: "Le nom de l'expéditeur s'affiche avec le message")
+            }
+            
+            HStack(spacing: 8) {
+                Image(systemName: "abc")
+                    .foregroundColor(Color(hex: "667eea"))
+                Text("Mode ABC : pour les messages sans espaces, utilisez \"Décoder ABC\"")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            // Encoder pour un correspondant
+            Divider()
+            Text("Encoder pour un correspondant")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                DocStep(number: 1, text: "Aller dans l'onglet Encoder")
+                DocStep(number: 2, text: "Si vous avez des correspondants, ils apparaissent en haut")
+                DocStep(number: 3, text: "Sélectionner le destinataire")
+                DocStep(number: 4, text: "Ses codes sont utilisés automatiquement")
+                DocStep(number: 5, text: "Écrire et encoder votre message")
+            }
+            
+            // Table protégée
+            Divider()
+            Text("Protéger la table de référence")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            
+            Text("La table de correspondance des lettres peut être déverrouillée par Face ID ou par code (1234 par défaut).")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            
+            HStack(spacing: 8) {
+                Image(systemName: "lock.shield.fill")
+                    .foregroundColor(.green)
+                Text("Face ID protège vos codes - même si quelqu'un prend votre téléphone, il ne peut pas décoder sans votre visage.")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

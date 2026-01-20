@@ -201,19 +201,40 @@ struct PremiumView: View {
     // MARK: - Restore
     
     private var restoreSection: some View {
-        Button(action: {
-            Task {
-                await storeManager.restorePurchases()
-                if usageManager.isPremium {
-                    showSuccessAlert = true
+        VStack(spacing: 12) {
+            Button(action: {
+                Task {
+                    await storeManager.restorePurchases()
+                    if usageManager.isPremium {
+                        showSuccessAlert = true
+                    } else if storeManager.errorMessage == nil {
+                        // Aucun achat à restaurer
+                        storeManager.errorMessage = "Aucun achat précédent trouvé pour ce compte."
+                        showErrorAlert = true
+                    } else {
+                        showErrorAlert = true
+                    }
                 }
+            }) {
+                HStack {
+                    Image(systemName: "arrow.clockwise")
+                    Text("Restaurer mes achats")
+                        .fontWeight(.medium)
+                }
+                .foregroundColor(Color(hex: "667eea"))
+                .padding(.vertical, 12)
+                .padding(.horizontal, 24)
+                .background(Color(hex: "667eea").opacity(0.1))
+                .cornerRadius(12)
             }
-        }) {
-            Text("Restaurer mes achats")
-                .font(.subheadline)
+            .disabled(storeManager.isLoading)
+            
+            Text("Vous avez déjà acheté Premium ?\nRestaurez votre achat ici.")
+                .font(.caption)
                 .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
         }
-        .disabled(storeManager.isLoading)
+        .padding(.top, 8)
     }
     
     // MARK: - Premium Active
@@ -232,6 +253,48 @@ struct PremiumView: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
+            
+            Divider()
+                .padding(.vertical, 8)
+            
+            // Bouton restaurer les achats
+            Button(action: {
+                Task {
+                    await storeManager.restorePurchases()
+                }
+            }) {
+                HStack {
+                    Image(systemName: "arrow.clockwise")
+                    Text("Restaurer mes achats")
+                        .fontWeight(.medium)
+                }
+                .foregroundColor(Color(hex: "667eea"))
+                .padding(.vertical, 10)
+                .padding(.horizontal, 20)
+                .background(Color(hex: "667eea").opacity(0.1))
+                .cornerRadius(10)
+            }
+            .disabled(storeManager.isLoading)
+            
+            // Liens conditions et confidentialité
+            HStack(spacing: 16) {
+                Link(destination: URL(string: "https://boboul-cloud.github.io/CourrierCode/Website/terms.html")!) {
+                    Text("Conditions d'utilisation")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .underline()
+                }
+                
+                Text("•")
+                    .foregroundColor(.secondary)
+                
+                Link(destination: URL(string: "https://boboul-cloud.github.io/CourrierCode/Website/privacy.html")!) {
+                    Text("Confidentialité")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .underline()
+                }
+            }
         }
         .padding(40)
         .background(Color(.systemBackground))

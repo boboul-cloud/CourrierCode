@@ -55,6 +55,8 @@
     <string>Courrier Codé a besoin d'accéder à votre photothèque pour sauvegarder les images décodées.</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Courrier Codé a besoin d'accéder à votre photothèque pour sélectionner des images à encoder.</string>
+    <key>NSFaceIDUsageDescription</key>
+    <string>Courrier Codé utilise Face ID pour remplir automatiquement vos codes secrets sauvegardés.</string>
     <key>CFBundleDocumentTypes</key>
     <array>
         <dict>

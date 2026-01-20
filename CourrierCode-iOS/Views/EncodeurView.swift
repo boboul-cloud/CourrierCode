@@ -9,14 +9,25 @@ struct EncodeurView: View {
     @State private var texteMelange = ""
     @State private var showPremiumView = false
     @State private var showLimiteAtteinte = false
+    @State private var correspondantSelectionne: Correspondant? = nil
     
     @AppStorage("codeTableSauvegarde") private var codeTable = ""
     @ObservedObject private var usageManager = UsageManager.shared
+    @ObservedObject private var contactsManager = ContactsManager.shared
     
     private let codeur = CourrierCodeur()
     
+    // Codes effectifs (du correspondant sélectionné ou saisis manuellement)
+    private var effectiveCodeSecret: String {
+        correspondantSelectionne?.codeSecret ?? codeSecret
+    }
+    
+    private var effectiveCodeTable: String {
+        correspondantSelectionne?.codeTable ?? codeTable
+    }
+    
     var messageCode: String {
-        codeur.encoder(texte: texteOriginal, avecDecalage: true, codeSecret: codeSecret, codeTable: codeTable)
+        codeur.encoder(texte: texteOriginal, avecDecalage: true, codeSecret: effectiveCodeSecret, codeTable: effectiveCodeTable)
     }
     
     var messageInverse: String {
@@ -26,11 +37,11 @@ struct EncodeurView: View {
     // Code mélangé = encodage de la phrase mélangée
     var messageMelange: String {
         guard !texteMelange.isEmpty else { return "" }
-        return codeur.encoder(texte: texteMelange, avecDecalage: true, codeSecret: codeSecret, codeTable: codeTable)
+        return codeur.encoder(texte: texteMelange, avecDecalage: true, codeSecret: effectiveCodeSecret, codeTable: effectiveCodeTable)
     }
     
     var tableAleatoireActive: Bool {
-        codeTable.count == 6
+        effectiveCodeTable.count == 6
     }
     
     // Fonction pour mélanger les mots du texte original
@@ -46,8 +57,13 @@ struct EncodeurView: View {
                     VStack(spacing: 24) {
                         headerView
                         usageBadge
+                        if contactsManager.hasCorrespondants {
+                            correspondantSelector
+                        }
                         statusIndicators
-                        codeSecretSection
+                        if correspondantSelectionne == nil {
+                            codeSecretSection
+                        }
                         inputSection
                         melangeTexteSection
                         resultSection
@@ -142,12 +158,84 @@ struct EncodeurView: View {
         .padding(.bottom, 5)
     }
     
+    // Sélecteur de correspondant du carnet
+    private var correspondantSelector: some View {
+        GlassCard {
+            VStack(alignment: .leading, spacing: 12) {
+                SectionHeader(title: "Destinataire", icon: "person.fill", color: Color(hex: "667eea"), subtitle: "Sélectionnez un correspondant du carnet")
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 12) {
+                        // Option "Manuel"
+                        Button(action: { correspondantSelectionne = nil }) {
+                            VStack(spacing: 6) {
+                                ZStack {
+                                    Circle()
+                                        .fill(correspondantSelectionne == nil ? 
+                                              LinearGradient(colors: [Color(hex: "667eea"), Color(hex: "764ba2")], startPoint: .topLeading, endPoint: .bottomTrailing) :
+                                              LinearGradient(colors: [Color.gray.opacity(0.3), Color.gray.opacity(0.3)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                        .frame(width: 50, height: 50)
+                                    
+                                    Image(systemName: "pencil")
+                                        .font(.title3)
+                                        .foregroundColor(correspondantSelectionne == nil ? .white : .gray)
+                                }
+                                Text("Manuel")
+                                    .font(.caption)
+                                    .foregroundColor(correspondantSelectionne == nil ? Color(hex: "667eea") : .secondary)
+                            }
+                        }
+                        
+                        // Correspondants du carnet
+                        ForEach(contactsManager.correspondants) { correspondant in
+                            Button(action: { correspondantSelectionne = correspondant }) {
+                                VStack(spacing: 6) {
+                                    ZStack {
+                                        Circle()
+                                            .fill(correspondantSelectionne?.id == correspondant.id ?
+                                                  LinearGradient(colors: [Color(hex: "667eea"), Color(hex: "764ba2")], startPoint: .topLeading, endPoint: .bottomTrailing) :
+                                                  LinearGradient(colors: [Color.gray.opacity(0.3), Color.gray.opacity(0.3)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                            .frame(width: 50, height: 50)
+                                        
+                                        Text(String(correspondant.nom.prefix(1)).uppercased())
+                                            .font(.title3)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(correspondantSelectionne?.id == correspondant.id ? .white : .gray)
+                                    }
+                                    Text(correspondant.nom)
+                                        .font(.caption)
+                                        .foregroundColor(correspondantSelectionne?.id == correspondant.id ? Color(hex: "667eea") : .secondary)
+                                        .lineLimit(1)
+                                }
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 4)
+                }
+                
+                if let correspondant = correspondantSelectionne {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                        Text("Codes de \(correspondant.nom) utilisés")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.top, 4)
+                }
+            }
+        }
+    }
+    
     private var statusIndicators: some View {
         HStack(spacing: 10) {
-            if tableAleatoireActive {
-                StatusPill(text: "Table: \(codeTable)", icon: "shuffle", color: AppColors.random)
+            if let correspondant = correspondantSelectionne {
+                StatusPill(text: correspondant.nom, icon: "person.fill", color: Color(hex: "667eea"))
             }
-            if !codeSecret.isEmpty {
+            if tableAleatoireActive {
+                StatusPill(text: "Table: \(effectiveCodeTable)", icon: "shuffle", color: AppColors.random)
+            }
+            if correspondantSelectionne == nil && !codeSecret.isEmpty {
                 StatusPill(text: "Code secret actif", icon: "key.fill", color: AppColors.secret)
             }
             Spacer()

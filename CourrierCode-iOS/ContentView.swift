@@ -52,16 +52,16 @@ struct ContentView: View {
                 }
                 .tag(3)
             
-            DocumentationView()
+            AutreView()
                 .tabItem {
-                    Image(systemName: "book.circle.fill")
-                    Text("Aide")
+                    Image(systemName: "ellipsis.circle.fill")
+                    Text("Autre")
                 }
                 .tag(4)
         }
         .onChange(of: appState.shouldNavigateToImageDecoder) { _, shouldNavigate in
             if shouldNavigate {
-                selectedTab = 2  // Aller à l'onglet Image
+                selectedTab = 2  // Aller à l'onglet Image (maintenant en position 2)
                 appState.shouldNavigateToImageDecoder = false
             }
         }

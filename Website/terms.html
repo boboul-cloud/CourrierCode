@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditions d'utilisation - CourrierCode</title>
+    <meta name="description" content="Conditions générales d'utilisation de l'application CourrierCode">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --bg-dark: #0f0f1a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(102, 126, 234, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(118, 75, 162, 0.2) 0%, transparent 50%),
+                var(--bg-dark);
+            z-index: -1;
+        }
+
+        header {
+            padding: 1.5rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .last-updated {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        ul {
+            color: var(--text-secondary);
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            main {
+                padding: 1rem;
+            }
+            
+            .content-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    
+    <header>
+        <a href="index.html" class="back-link">
+            ← Retour à l'accueil
+        </a>
+    </header>
+
+    <main>
+        <h1>Conditions d'utilisation</h1>
+        <p class="last-updated">Dernière mise à jour : 20 janvier 2026</p>
+
+        <div class="content-card">
+            <h2>📱 1. Acceptation des conditions</h2>
+            <p>En téléchargeant, installant ou utilisant l'application CourrierCode, vous acceptez d'être lié par ces conditions d'utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser l'application.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>🔐 2. Description du service</h2>
+            <p>CourrierCode est une application de chiffrement de messages utilisant un système de codage par substitution de lettres. L'application permet :</p>
+            <ul>
+                <li>L'encodage de messages texte</li>
+                <li>Le décodage de messages chiffrés</li>
+                <li>La gestion d'un carnet de correspondants (stocké localement)</li>
+                <li>L'encodage d'images (fonctionnalité Premium)</li>
+            </ul>
+        </div>
+
+        <div class="content-card">
+            <h2>💳 3. Achats intégrés</h2>
+            <p><strong>Version gratuite :</strong> L'application offre 5 utilisations gratuites par jour (encodage ou décodage).</p>
+            <p><strong>Version Premium :</strong> Un achat unique débloque un accès illimité à toutes les fonctionnalités, sans abonnement.</p>
+            <p>Les achats sont traités par Apple via l'App Store. Aucun remboursement ne peut être effectué directement par le développeur. Pour toute demande de remboursement, veuillez contacter le support Apple.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>🔄 4. Restauration des achats</h2>
+            <p>Si vous changez d'appareil ou réinstallez l'application, vous pouvez restaurer vos achats précédents via le bouton "Restaurer mes achats" disponible dans l'écran Premium.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>⚠️ 5. Utilisation appropriée</h2>
+            <p>Vous vous engagez à utiliser CourrierCode de manière légale et responsable. L'application est conçue pour un usage personnel et ludique. Le développeur n'est pas responsable de l'utilisation qui est faite des messages encodés.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>🛡️ 6. Propriété intellectuelle</h2>
+            <p>L'application CourrierCode, son design, son code et son contenu sont la propriété de Robert Oulhen. Toute reproduction ou distribution non autorisée est interdite.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>📵 7. Limitation de responsabilité</h2>
+            <p>L'application est fournie "en l'état". Le développeur ne garantit pas que l'application sera exempte d'erreurs ou d'interruptions. En aucun cas, le développeur ne pourra être tenu responsable de dommages directs ou indirects résultant de l'utilisation de l'application.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>🔄 8. Modifications des conditions</h2>
+            <p>Ces conditions peuvent être modifiées à tout moment. Les utilisateurs seront informés des changements significatifs via une mise à jour de l'application. L'utilisation continue de l'application après modification constitue une acceptation des nouvelles conditions.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>📧 9. Contact</h2>
+            <p>Pour toute question concernant ces conditions d'utilisation, vous pouvez nous contacter à :</p>
+            <p><strong>Email :</strong> bob.oulhen@gmail.com</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 CourrierCode - Robert Oulhen</p>
+        <p><a href="privacy.html">Politique de confidentialité</a> • <a href="support.html">Support</a></p>
+    </footer>
+</body>
+</html>

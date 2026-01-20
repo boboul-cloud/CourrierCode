@@ -9,8 +9,12 @@ struct DecodeurView: View {
     @State private var jourDetecte: String? = nil
     @State private var showPremiumView = false
     @State private var showLimiteAtteinte = false
+    @State private var correspondantDetecte: String? = nil  // Nom du correspondant détecté
+    @State private var modeCarnet = false  // Mode décodage automatique avec carnet
     
     @ObservedObject private var usageManager = UsageManager.shared
+    @ObservedObject private var biometricManager = BiometricManager.shared
+    @ObservedObject private var contactsManager = ContactsManager.shared
     private let codeur = CourrierCodeur()
     
     var tableAleatoireActive: Bool {
@@ -24,9 +28,14 @@ struct DecodeurView: View {
                     VStack(spacing: 24) {
                         headerView
                         usageBadge
+                        if contactsManager.hasCorrespondants {
+                            modeSelector
+                        }
                         statusIndicators
-                        tableSection
-                        codeSecretSection
+                        if !modeCarnet {
+                            tableSection
+                            codeSecretSection
+                        }
                         inputSection
                         actionButtonsSection
                         resultSection
@@ -62,6 +71,36 @@ struct DecodeurView: View {
             }
             .sheet(isPresented: $showPremiumView) {
                 PremiumView()
+            }
+        }
+    }
+    
+    // Sélecteur de mode (manuel ou carnet)
+    private var modeSelector: some View {
+        GlassCard {
+            VStack(spacing: 12) {
+                HStack {
+                    Image(systemName: biometricManager.biometricIcon)
+                        .foregroundColor(Color(hex: "667eea"))
+                    Text("Décodage automatique")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                    Spacer()
+                    Toggle("", isOn: $modeCarnet)
+                        .labelsHidden()
+                        .tint(Color(hex: "667eea"))
+                }
+                
+                if modeCarnet {
+                    HStack {
+                        Image(systemName: "checkmark.shield.fill")
+                            .foregroundColor(.green)
+                        Text("\(contactsManager.count) correspondant\(contactsManager.count > 1 ? "s" : "") dans le carnet")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Spacer()
+                    }
+                }
             }
         }
     }
@@ -123,10 +162,13 @@ struct DecodeurView: View {
     
     private var statusIndicators: some View {
         HStack(spacing: 10) {
-            if tableAleatoireActive {
+            if let correspondant = correspondantDetecte {
+                StatusPill(text: correspondant, icon: "person.fill", color: Color(hex: "667eea"))
+            }
+            if !modeCarnet && tableAleatoireActive {
                 StatusPill(text: "Table: \(codeTableManuel)", icon: "shuffle", color: AppColors.random)
             }
-            if !codeSecret.isEmpty {
+            if !modeCarnet && !codeSecret.isEmpty {
                 StatusPill(text: "Code secret", icon: "key.fill", color: AppColors.secret)
             }
             if let jour = jourDetecte {
@@ -180,15 +222,28 @@ struct DecodeurView: View {
     private var actionButtonsSection: some View {
         VStack(spacing: 12) {
             GradientButton(title: "Coller", icon: "doc.on.clipboard.fill", gradient: AppColors.warningGradient, action: coller, fullWidth: true)
-            GradientButton(title: "Décoder", icon: "lock.open.fill", gradient: AppColors.primaryGradient, action: decoderIntelligent, fullWidth: true)
-            Button(action: decoderLettresCollees) {
-                HStack {
-                    Image(systemName: "textformat.abc")
-                    Text("Décoder sans espaces")
-                        .fontWeight(.medium)
+            
+            if modeCarnet {
+                // Mode carnet : décodage avec Face ID
+                GradientButton(
+                    title: "Décoder avec \(biometricManager.biometricTypeString)",
+                    icon: biometricManager.biometricIcon,
+                    gradient: LinearGradient(colors: [Color(hex: "667eea"), Color(hex: "764ba2")], startPoint: .leading, endPoint: .trailing),
+                    action: decoderAvecCarnet,
+                    fullWidth: true
+                )
+            } else {
+                // Mode manuel classique
+                GradientButton(title: "Décoder", icon: "lock.open.fill", gradient: AppColors.primaryGradient, action: decoderIntelligent, fullWidth: true)
+                Button(action: decoderLettresCollees) {
+                    HStack {
+                        Image(systemName: "textformat.abc")
+                        Text("Décoder sans espaces")
+                            .fontWeight(.medium)
+                    }
+                    .foregroundColor(AppColors.random)
+                    .padding(.vertical, 8)
                 }
-                .foregroundColor(AppColors.random)
-                .padding(.vertical, 8)
             }
         }
     }
@@ -236,6 +291,44 @@ struct DecodeurView: View {
         }
     }
     
+    // MARK: - Décodage avec carnet (Face ID)
+    
+    private func decoderAvecCarnet() {
+        guard !texteCrypte.isEmpty else { return }
+        
+        // Vérifier si l'utilisateur peut encore utiliser
+        guard usageManager.canUse else {
+            withAnimation {
+                showLimiteAtteinte = true
+            }
+            return
+        }
+        
+        // Authentification biométrique
+        biometricManager.authenticate(reason: "Décoder avec votre carnet de codes") { success, _ in
+            guard success else { return }
+            
+            // Enregistrer l'utilisation
+            usageManager.recordUsage()
+            
+            // Tester tous les correspondants
+            if let resultat = contactsManager.decoderAvecCarnet(texte: texteCrypte, codeur: codeur) {
+                withAnimation {
+                    messageDecode = resultat.messageDecod
+                    correspondantDetecte = resultat.correspondant.nom
+                    jourDetecte = resultat.jourDetecte
+                }
+            } else {
+                // Aucun correspondant n'a fonctionné
+                messageDecode = "⚠️ Aucun correspondant du carnet ne correspond à ce message. Essayez le mode manuel."
+                correspondantDetecte = nil
+                jourDetecte = nil
+            }
+        }
+    }
+    
+    // MARK: - Décodage manuel
+    
     private func decoderIntelligent() {
         // Vérifier si l'utilisateur peut encore utiliser
         guard usageManager.canUse else {
@@ -250,6 +343,7 @@ struct DecodeurView: View {
         
         let resultat = codeur.decoderIntelligent(texte: texteCrypte, modeJour: true, codeSecret: codeSecret, codeTable: codeTableManuel)
         messageDecode = resultat.texte
+        correspondantDetecte = nil
         
         if let info = codeur.extraireJourDuCode(texteCrypte.replacingOccurrences(of: " ", with: "")) {
             jourDetecte = codeur.nomsJours[info.jour]
@@ -281,6 +375,7 @@ struct DecodeurView: View {
             let decalage = codeur.getDecalageJour(jour: info.jour) + decalageSecret
             messageDecode = codeur.decoder(texte: codeSansMarqueur, decalage: decalage, codeTable: codeTableManuel)
             jourDetecte = codeur.nomsJours[info.jour]
+            correspondantDetecte = nil
             return
         }
         
@@ -289,6 +384,7 @@ struct DecodeurView: View {
             let decalage = codeur.getDecalageJour(jour: info.jour) + decalageSecret
             messageDecode = codeur.decoder(texte: codeSansMarqueur, decalage: decalage, codeTable: codeTableManuel)
             jourDetecte = codeur.nomsJours[info.jour]
+            correspondantDetecte = nil
             return
         }
         
@@ -320,6 +416,7 @@ struct DecodeurView: View {
         }
         
         messageDecode = meilleurResultat
+        correspondantDetecte = nil
         jourDetecte = meilleurJour != nil ? codeur.nomsJours[meilleurJour!] : nil
     }
     
@@ -327,6 +424,9 @@ struct DecodeurView: View {
         withAnimation {
             texteCrypte = ""
             messageDecode = ""
+            codeSecret = ""
+            codeTableManuel = ""
+            correspondantDetecte = nil
             jourDetecte = nil
         }
     }

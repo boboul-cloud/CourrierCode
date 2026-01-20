@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AAA00027 /* ImageEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00028 /* ImageEncoder.swift */; };
-		AAA00029 /* ImageEncoderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA0002A /* ImageEncoderView.swift */; };
 		AAA00001 /* CourrierCodeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00011 /* CourrierCodeApp.swift */; };
 		AAA00002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00012 /* ContentView.swift */; };
 		AAA00003 /* EncodeurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00013 /* EncodeurView.swift */; };
@@ -24,6 +22,12 @@
 		AAA0000D /* UsageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00024 /* UsageManager.swift */; };
 		AAA0000E /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00025 /* StoreManager.swift */; };
 		AAA0000F /* PremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00026 /* PremiumView.swift */; };
+		AAA00027 /* ImageEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00028 /* ImageEncoder.swift */; };
+		AAA00029 /* ImageEncoderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA0002A /* ImageEncoderView.swift */; };
+		AAA0002B /* BiometricManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA0002C /* BiometricManager.swift */; };
+		AAA0002D /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA0002E /* ContactsManager.swift */; };
+		AAA0002F /* CarnetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00031 /* CarnetView.swift */; };
+		AAA00032 /* AutreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00033 /* AutreView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,9 +48,13 @@
 		AAA00024 /* UsageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageManager.swift; sourceTree = "<group>"; };
 		AAA00025 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		AAA00026 /* PremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumView.swift; sourceTree = "<group>"; };
-		BF397EEC2F1D612F00443C58 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
 		AAA00028 /* ImageEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEncoder.swift; sourceTree = "<group>"; };
 		AAA0002A /* ImageEncoderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEncoderView.swift; sourceTree = "<group>"; };
+		AAA0002C /* BiometricManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricManager.swift; sourceTree = "<group>"; };
+		AAA0002E /* ContactsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsManager.swift; sourceTree = "<group>"; };
+		AAA00031 /* CarnetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarnetView.swift; sourceTree = "<group>"; };
+		AAA00033 /* AutreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutreView.swift; sourceTree = "<group>"; };
+		BF397EEC2F1D612F00443C58 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +109,8 @@
 				AAA00022 /* DocumentationView.swift */,
 				AAA00026 /* PremiumView.swift */,
 				AAA0002A /* ImageEncoderView.swift */,
+				AAA00031 /* CarnetView.swift */,
+				AAA00033 /* AutreView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -122,6 +132,8 @@
 				AAA00024 /* UsageManager.swift */,
 				AAA00025 /* StoreManager.swift */,
 				AAA00028 /* ImageEncoder.swift */,
+				AAA0002C /* BiometricManager.swift */,
+				AAA0002E /* ContactsManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -219,6 +231,10 @@
 				AAA0000F /* PremiumView.swift in Sources */,
 				AAA00027 /* ImageEncoder.swift in Sources */,
 				AAA00029 /* ImageEncoderView.swift in Sources */,
+				AAA0002B /* BiometricManager.swift in Sources */,
+				AAA0002D /* ContactsManager.swift in Sources */,
+				AAA0002F /* CarnetView.swift in Sources */,
+				AAA00032 /* AutreView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,11 +370,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "CourrierCode-iOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Courrier Codé";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -368,7 +385,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.courriercode.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -383,11 +400,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "CourrierCode-iOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Courrier Codé";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -397,7 +415,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.courriercode.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
