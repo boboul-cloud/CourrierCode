@@ -90,6 +90,15 @@ struct DocumentationView: View {
                     }
                     
                     docSection(
+                        id: "decoupe",
+                        title: "Découpe Mots",
+                        icon: "textformat.abc.dottedunderline",
+                        color: Color.purple
+                    ) {
+                        decoupeMotsSectionContent
+                    }
+                    
+                    docSection(
                         id: "image",
                         title: "Codage d'images",
                         icon: "photo.circle.fill",
@@ -400,6 +409,45 @@ struct DocumentationView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
+            
+            // Options de partage
+            Divider()
+            Text("Options de partage")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(alignment: .top, spacing: 10) {
+                    Image(systemName: "qrcode")
+                        .foregroundColor(AppColors.encode)
+                        .frame(width: 24)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("QR Code")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                        Text("Génère un code QR contenant le message codé. Le destinataire peut le scanner directement avec l'app CourrierCode pour décoder instantanément.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                
+                HStack(alignment: .top, spacing: 10) {
+                    Image(systemName: "link")
+                        .foregroundColor(AppColors.encode)
+                        .frame(width: 24)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Lien")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                        Text("Crée un lien courriercode:// qui ouvre automatiquement l'app avec le message pré-rempli. Idéal pour envoyer par SMS ou messagerie.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(12)
         }
     }
     
@@ -520,6 +568,55 @@ struct DocumentationView: View {
                 Text("Face ID protège vos codes - même si quelqu'un prend votre téléphone, il ne peut pas décoder sans votre visage.")
                     .font(.caption)
                     .foregroundColor(.secondary)
+            }
+        }
+    }
+    
+    // MARK: - Section Découpe Mots
+    private var decoupeMotsSectionContent: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Recomposez des phrases à partir de texte sans espaces grâce à l'intelligence artificielle.")
+                .foregroundColor(.secondary)
+            
+            // Principe
+            Text("Principe")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                DocBullet(text: "Les messages codés perdent souvent leurs espaces")
+                DocBullet(text: "L'IA analyse le texte et retrouve les mots")
+                DocBullet(text: "L'orthographe est corrigée automatiquement")
+            }
+            
+            Divider()
+            
+            // Utilisation
+            Text("Comment utiliser")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                DocStep(number: 1, text: "Allez dans l'onglet Découpe")
+                DocStep(number: 2, text: "Collez ou tapez le texte sans espaces")
+                DocStep(number: 3, text: "Appuyez sur \"Découper avec l'IA\"")
+                DocStep(number: 4, text: "L'IA recompose la phrase lisible")
+            }
+            
+            HStack(spacing: 8) {
+                Image(systemName: "sparkles")
+                    .foregroundColor(.purple)
+                Text("Exemple : \"bonaboriejhui\" → \"Bonne journée !")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            HStack(spacing: 8) {
+                Image(systemName: "wifi")
+                    .foregroundColor(.orange)
+                Text("Cette fonctionnalité nécessite une connexion internet.")
+                    .font(.caption)
+                    .foregroundColor(.orange)
             }
         }
     }

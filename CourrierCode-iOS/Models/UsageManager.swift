@@ -8,7 +8,7 @@ class UsageManager: ObservableObject {
     // MARK: - Configuration
     
     /// Nombre d'utilisations gratuites par jour
-    static let limiteFreeParJour = 5
+    static let limiteFreeParJour = 10
     
     // MARK: - Clés UserDefaults
     

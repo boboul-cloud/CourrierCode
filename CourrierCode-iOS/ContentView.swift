@@ -45,10 +45,10 @@ struct ContentView: View {
                 }
                 .tag(2)
             
-            TableReferenceView()
+            DecoupeMotsView()
                 .tabItem {
-                    Image(systemName: "tablecells.badge.ellipsis")
-                    Text("Table")
+                    Image(systemName: "textformat.abc.dottedunderline")
+                    Text("Découpe")
                 }
                 .tag(3)
             
@@ -63,6 +63,18 @@ struct ContentView: View {
             if shouldNavigate {
                 selectedTab = 2  // Aller à l'onglet Image (maintenant en position 2)
                 appState.shouldNavigateToImageDecoder = false
+            }
+        }
+        .onChange(of: appState.shouldNavigateToDecoder) { _, shouldNavigate in
+            if shouldNavigate {
+                selectedTab = 1  // Aller à l'onglet Décoder
+                appState.shouldNavigateToDecoder = false
+            }
+        }
+        .onChange(of: appState.shouldNavigateToEncoder) { _, shouldNavigate in
+            if shouldNavigate {
+                selectedTab = 0  // Aller à l'onglet Encoder
+                appState.shouldNavigateToEncoder = false
             }
         }
         .tint(Color(hex: "667eea"))

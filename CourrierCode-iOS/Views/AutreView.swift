@@ -38,6 +38,16 @@ struct AutreView: View {
                             )
                         }
                         
+                        // Bouton Table de référence
+                        NavigationLink(destination: TableReferenceView()) {
+                            AutreButtonCard(
+                                icon: "tablecells.badge.ellipsis",
+                                title: "Table de référence",
+                                subtitle: "Consultez la table de correspondance des codes",
+                                gradientColors: [Color.purple, Color.pink]
+                            )
+                        }
+                        
                         // Bouton Aide
                         NavigationLink(destination: DocumentationView()) {
                             AutreButtonCard(

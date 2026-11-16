@@ -16,7 +16,7 @@ struct AppColors {
     )
     
     static let successGradient = LinearGradient(
-        colors: [Color(hex: "11998e"), Color(hex: "38ef7d")],
+        colors: [Color(hex: "8e44ad"), Color(hex: "9b59b6")],
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
@@ -44,7 +44,7 @@ struct AppColors {
     static let surfaceColor = Color(.systemGray6)
     
     // Couleurs sémantiques
-    static let encode = Color(hex: "38ef7d")
+    static let encode = Color(hex: "9b59b6")  // Mauve/violet pour meilleure visibilité
     static let decode = Color(hex: "667eea")
     static let secret = Color(hex: "f2994a")
     static let random = Color(hex: "a855f7")

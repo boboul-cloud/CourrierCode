@@ -1,4 +1,11 @@
 import SwiftUI
+import CoreImage.CIFilterBuiltins
+
+// Structure identifiable pour passer le message au QRCodeView
+struct QRCodeItem: Identifiable {
+    let id = UUID()
+    let message: String
+}
 
 struct EncodeurView: View {
     @State private var texteOriginal = ""
@@ -10,10 +17,14 @@ struct EncodeurView: View {
     @State private var showPremiumView = false
     @State private var showLimiteAtteinte = false
     @State private var correspondantSelectionne: Correspondant? = nil
+    @State private var isShowingExportSheet = false
+    @State private var exportFileURL: URL?
+    @State private var qrCodeItem: QRCodeItem? = nil
     
     @AppStorage("codeTableSauvegarde") private var codeTable = ""
     @ObservedObject private var usageManager = UsageManager.shared
     @ObservedObject private var contactsManager = ContactsManager.shared
+    @EnvironmentObject var appState: AppState
     
     private let codeur = CourrierCodeur()
     
@@ -100,6 +111,31 @@ struct EncodeurView: View {
             .sheet(isPresented: $showPremiumView) {
                 PremiumView()
             }
+            .sheet(isPresented: $isShowingExportSheet, onDismiss: {
+                cleanupExportFile()
+            }) {
+                MessageShareSheetView(fileURL: exportFileURL)
+            }
+            .sheet(item: $qrCodeItem) { item in
+                QRCodeView(message: item.message)
+            }
+            .onAppear {
+                checkForMessageToEncode()
+            }
+            .onChange(of: appState.messageToEncode) { _, newMessage in
+                if newMessage != nil {
+                    checkForMessageToEncode()
+                }
+            }
+        }
+    }
+    
+    // Vérifie si un message doit être encodé (venant d'une autre app)
+    private func checkForMessageToEncode() {
+        if let message = appState.messageToEncode {
+            print("📥 Message à encoder détecté: \(message.count) caractères")
+            self.texteOriginal = message
+            appState.messageToEncode = nil
         }
     }
     
@@ -311,6 +347,14 @@ struct EncodeurView: View {
                                     .background(Color.pink.opacity(0.15))
                                     .cornerRadius(8)
                                 }
+                                Button(action: { exportMessage(texteMelange, prefix: "MotsMelanges") }) {
+                                    Image(systemName: "square.and.arrow.up")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.white)
+                                        .padding(8)
+                                        .background(Color.pink)
+                                        .cornerRadius(8)
+                                }
                                 AnimatedCopyButton(action: { copyToClipboard(texteMelange) }, color: .pink)
                             }
                             Text(texteMelange)
@@ -335,11 +379,40 @@ struct EncodeurView: View {
                     HStack {
                         SectionHeader(title: "Message codé", icon: "lock.shield.fill", color: AppColors.encode)
                         Spacer()
+                        // Bouton QR Code
+                        Button(action: { 
+                            print("🔘 Bouton QR cliqué, messageCode: '\(messageCode)' (\(messageCode.count) caractères)")
+                            qrCodeItem = QRCodeItem(message: messageCode)
+                        }) {
+                            Image(systemName: "qrcode")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(.white)
+                                .padding(8)
+                                .background(AppColors.encode)
+                                .cornerRadius(8)
+                        }
+                        // Bouton partage lien CourrierCode
+                        Button(action: { shareAsLink(messageCode) }) {
+                            Image(systemName: "link")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(.white)
+                                .padding(8)
+                                .background(AppColors.encode)
+                                .cornerRadius(8)
+                        }
+                        Button(action: { exportMessage(messageCode, prefix: "Code") }) {
+                            Image(systemName: "square.and.arrow.up")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(.white)
+                                .padding(8)
+                                .background(AppColors.encode)
+                                .cornerRadius(8)
+                        }
                         AnimatedCopyButton(action: { copyToClipboard(messageCode) }, color: AppColors.encode)
                     }
                     Text(messageCode.isEmpty ? "Le code apparaîtra ici..." : messageCode)
                         .font(.system(.body, design: .monospaced))
-                        .foregroundColor(messageCode.isEmpty ? .secondary : AppColors.encode)
+                        .foregroundColor(messageCode.isEmpty ? .secondary : .white)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(16)
                         .background(RoundedRectangle(cornerRadius: 12).fill(Color.black.opacity(0.8)))
@@ -367,11 +440,19 @@ struct EncodeurView: View {
                             HStack {
                                 SectionHeader(title: "Message inversé", icon: "arrow.uturn.backward", color: AppColors.random)
                                 Spacer()
+                                Button(action: { exportMessage(messageInverse, prefix: "Inverse") }) {
+                                    Image(systemName: "square.and.arrow.up")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.white)
+                                        .padding(8)
+                                        .background(AppColors.random)
+                                        .cornerRadius(8)
+                                }
                                 AnimatedCopyButton(action: { copyToClipboard(messageInverse) }, color: AppColors.random)
                             }
                             Text(messageInverse)
                                 .font(.system(.body, design: .monospaced))
-                                .foregroundColor(AppColors.random)
+                                .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(16)
                                 .background(RoundedRectangle(cornerRadius: 12).fill(Color.black.opacity(0.8)))
@@ -400,11 +481,19 @@ struct EncodeurView: View {
                             HStack {
                                 SectionHeader(title: "Code mélangé", icon: "shuffle", color: AppColors.secret)
                                 Spacer()
+                                Button(action: { exportMessage(messageMelange, prefix: "Melange") }) {
+                                    Image(systemName: "square.and.arrow.up")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.white)
+                                        .padding(8)
+                                        .background(AppColors.secret)
+                                        .cornerRadius(8)
+                                }
                                 AnimatedCopyButton(action: { copyToClipboard(messageMelange) }, color: AppColors.secret)
                             }
                             Text(messageMelange)
                                 .font(.system(.body, design: .monospaced))
-                                .foregroundColor(AppColors.secret)
+                                .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(16)
                                 .background(RoundedRectangle(cornerRadius: 12).fill(Color.black.opacity(0.8)))
@@ -449,8 +538,237 @@ struct EncodeurView: View {
         // Copier dans le presse-papier
         UIPasteboard.general.string = text
     }
+    
+    private func exportMessage(_ message: String, prefix: String) {
+        guard !message.isEmpty else { return }
+        guard usageManager.canUse else {
+            withAnimation { showLimiteAtteinte = true }
+            return
+        }
+        
+        let fileName = "CourrierCode_\(prefix)_\(Int(Date().timeIntervalSince1970)).txt"
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        
+        do {
+            try message.write(to: tempURL, atomically: true, encoding: .utf8)
+            self.exportFileURL = tempURL
+            usageManager.recordUsage()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.isShowingExportSheet = true
+            }
+        } catch {
+            print("Erreur export: \(error.localizedDescription)")
+        }
+    }
+    
+    private func shareAsLink(_ message: String) {
+        guard !message.isEmpty else { return }
+        guard usageManager.canUse else {
+            withAnimation { showLimiteAtteinte = true }
+            return
+        }
+        
+        // Créer le lien courriercode://
+        let encodedMessage = message.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? message
+        let link = "courriercode://decode?message=\(encodedMessage)"
+        
+        usageManager.recordUsage()
+        
+        // Partager le lien
+        let activityVC = UIActivityViewController(activityItems: [link], applicationActivities: nil)
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootVC = windowScene.windows.first?.rootViewController {
+            rootVC.present(activityVC, animated: true)
+        }
+    }
+    
+    private func cleanupExportFile() {
+        if let url = exportFileURL {
+            try? FileManager.default.removeItem(at: url)
+            exportFileURL = nil
+        }
+    }
+}
+
+// MARK: - QR Code View
+
+struct QRCodeView: View {
+    let message: String
+    @Environment(\.dismiss) var dismiss
+    @State private var qrImage: UIImage?
+    
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 24) {
+                Text("Scannez ce QR code")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                
+                Text("L'autre utilisateur peut scanner ce code avec son app CourrierCode pour recevoir le message")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                
+                if let qrImage = qrImage {
+                    Image(uiImage: qrImage)
+                        .interpolation(.none)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 250, height: 250)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(16)
+                        .shadow(radius: 10)
+                } else {
+                    ProgressView()
+                        .frame(width: 250, height: 250)
+                }
+                
+                VStack(spacing: 12) {
+                    Button(action: saveQRCode) {
+                        HStack {
+                            Image(systemName: "square.and.arrow.down")
+                            Text("Enregistrer l'image")
+                        }
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(AppColors.encode)
+                        .cornerRadius(12)
+                    }
+                    
+                    Button(action: shareQRCode) {
+                        HStack {
+                            Image(systemName: "square.and.arrow.up")
+                            Text("Partager")
+                        }
+                        .font(.headline)
+                        .foregroundColor(AppColors.encode)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(AppColors.encode.opacity(0.15))
+                        .cornerRadius(12)
+                    }
+                }
+                .padding(.horizontal)
+                
+                Spacer()
+            }
+            .padding(.top, 20)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Fermer") {
+                        dismiss()
+                    }
+                }
+            }
+            .onAppear {
+                generateQRCode()
+            }
+        }
+    }
+    
+    private func generateQRCode() {
+        print("📊 Génération QR Code avec message: '\(message)' (\(message.count) caractères)")
+        
+        guard !message.isEmpty else {
+            print("❌ Message vide, QR code non généré")
+            return
+        }
+        
+        // Encoder le message pour l'URL
+        guard let encodedMessage = message.addingPercentEncoding(withAllowedCharacters: .alphanumerics) else {
+            print("❌ Impossible d'encoder le message")
+            return
+        }
+        
+        let link = "courriercode://decode?message=\(encodedMessage)"
+        print("📊 Lien QR Code: \(link)")
+        
+        let context = CIContext()
+        let filter = CIFilter.qrCodeGenerator()
+        filter.message = Data(link.utf8)
+        filter.correctionLevel = "M"
+        
+        if let outputImage = filter.outputImage {
+            let scale = 250 / outputImage.extent.width
+            let scaledImage = outputImage.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
+            
+            if let cgImage = context.createCGImage(scaledImage, from: scaledImage.extent) {
+                qrImage = UIImage(cgImage: cgImage)
+            }
+        }
+    }
+    
+    private func saveQRCode() {
+        guard let image = qrImage else { return }
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+    }
+    
+    private func shareQRCode() {
+        guard let image = qrImage else { return }
+        
+        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        
+        // Trouver le ViewController le plus haut dans la hiérarchie
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootVC = windowScene.windows.first?.rootViewController {
+            // Trouver le contrôleur présenté le plus haut
+            var topController = rootVC
+            while let presented = topController.presentedViewController {
+                topController = presented
+            }
+            topController.present(activityVC, animated: true)
+        }
+    }
+}
+
+// MARK: - Message Share Sheet View
+
+struct MessageShareSheetView: View {
+    let fileURL: URL?
+    @Environment(\.dismiss) var dismiss
+    
+    var body: some View {
+        Group {
+            if let url = fileURL, FileManager.default.fileExists(atPath: url.path) {
+                MessageShareSheet(items: [url])
+            } else {
+                VStack(spacing: 20) {
+                    ProgressView()
+                        .scaleEffect(1.5)
+                    Text("Préparation du fichier...")
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.systemBackground))
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        if fileURL == nil {
+                            dismiss()
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct MessageShareSheet: UIViewControllerRepresentable {
+    let items: [Any]
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
 #Preview {
     EncodeurView()
+        .environmentObject(AppState.shared)
 }

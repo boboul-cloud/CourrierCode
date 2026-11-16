@@ -49,8 +49,8 @@ class ImageEncoder {
     private let formatVersion = "1.0"
     
     // Taille maximale recommandée pour l'encodage (pour éviter les fichiers trop volumineux)
-    let maxRecommendedSize: CGFloat = 100
-    let maxAbsoluteSize: CGFloat = 200
+    let maxRecommendedSize: CGFloat = 150
+    let maxAbsoluteSize: CGFloat = 300
     
     private init() {}
     

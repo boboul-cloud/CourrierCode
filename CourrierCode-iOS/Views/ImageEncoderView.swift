@@ -1,6 +1,7 @@
 import SwiftUI
 import PhotosUI
 import UniformTypeIdentifiers
+import CoreImage.CIFilterBuiltins
 
 struct ImageEncoderView: View {
     // MARK: - États
@@ -26,7 +27,7 @@ struct ImageEncoderView: View {
     @State private var mode: ImageMode = .encode
     
     // Options d'encodage
-    @State private var targetWidth: Double = 50
+    @State private var targetWidth: Double = 100
     @State private var useResize = true
     
     @AppStorage("codeTableSauvegarde") private var codeTable = ""
@@ -111,12 +112,6 @@ struct ImageEncoderView: View {
                         importJSON(content)
                     }
                 ))
-            }
-            .sheet(isPresented: $isShowingExportSheet, onDismiss: {
-                // Nettoyer le fichier temporaire après fermeture
-                cleanupExportFile()
-            }) {
-                ShareSheetView(fileURL: exportFileURL)
             }
             .alert("Erreur", isPresented: $showError) {
                 Button("OK", role: .cancel) {}
@@ -311,7 +306,7 @@ struct ImageEncoderView: View {
                                         .foregroundColor(AppColors.random)
                                 }
                                 
-                                Slider(value: $targetWidth, in: 10...200, step: 10)
+                                Slider(value: $targetWidth, in: 20...300, step: 10)
                                     .tint(AppColors.random)
                             }
                         }
@@ -701,16 +696,38 @@ struct ImageEncoderView: View {
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
         
         do {
-            try jsonData.write(to: tempURL)
+            // Écrire le fichier
+            try jsonData.write(to: tempURL, options: [.atomic])
+            
+            // Vérifier que le fichier existe vraiment
+            guard FileManager.default.fileExists(atPath: tempURL.path) else {
+                print("❌ Le fichier n'existe pas après écriture")
+                errorMessage = "Erreur lors de la création du fichier."
+                showError = true
+                return
+            }
+            
+            print("✅ Fichier JSON créé: \(tempURL.path)")
+            
             self.exportFileURL = tempURL
             usageManager.recordUsage()
-            // Petit délai pour s'assurer que le fichier est prêt
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.isShowingExportSheet = true
-            }
+            
+            // Présenter directement depuis la fenêtre racine
+            shareFile(url: tempURL)
+            
         } catch {
+            print("❌ Erreur création fichier: \(error)")
             errorMessage = "Impossible de créer le fichier: \(error.localizedDescription)"
             showError = true
+        }
+    }
+    
+    private func shareFile(url: URL) {
+        let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootVC = windowScene.windows.first?.rootViewController {
+            rootVC.present(activityVC, animated: true)
         }
     }
     
@@ -842,11 +859,41 @@ struct ImageEncoderView: View {
 struct ShareSheetView: View {
     let fileURL: URL?
     @Environment(\.dismiss) var dismiss
+    @State private var showError = false
+    @State private var errorMessage = ""
     
     var body: some View {
         Group {
-            if let url = fileURL, FileManager.default.fileExists(atPath: url.path) {
-                ShareSheet(items: [url])
+            if let url = fileURL {
+                if FileManager.default.fileExists(atPath: url.path) {
+                    ShareSheet(
+                        items: [url],
+                        onComplete: {
+                            print("✅ Partage réussi")
+                        },
+                        onError: { error in
+                            print("❌ Erreur de partage: \(error.localizedDescription)")
+                            errorMessage = error.localizedDescription
+                            showError = true
+                        }
+                    )
+                } else {
+                    VStack(spacing: 20) {
+                        Image(systemName: "exclamationmark.triangle")
+                            .font(.system(size: 40))
+                            .foregroundColor(.orange)
+                        Text("Fichier introuvable")
+                            .font(.headline)
+                        Text("Le fichier n'a pas pu être préparé.")
+                            .foregroundColor(.secondary)
+                        Button("Fermer") {
+                            dismiss()
+                        }
+                        .padding()
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(.systemBackground))
+                }
             } else {
                 VStack(spacing: 20) {
                     ProgressView()
@@ -857,8 +904,8 @@ struct ShareSheetView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(.systemBackground))
                 .onAppear {
-                    // Fermer si toujours pas de fichier après 2 secondes
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    // Fermer si toujours pas de fichier après 3 secondes
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         if fileURL == nil {
                             dismiss()
                         }
@@ -866,24 +913,38 @@ struct ShareSheetView: View {
                 }
             }
         }
+        .alert("Erreur de partage", isPresented: $showError) {
+            Button("OK") { dismiss() }
+        } message: {
+            Text(errorMessage)
+        }
     }
 }
 
 // MARK: - Image Saver Helper
 
 class ImageSaver: NSObject {
+    // Singleton pour éviter la désallocation pendant la sauvegarde
+    private static var activeInstance: ImageSaver?
+    
     var successHandler: (() -> Void)?
     var errorHandler: ((Error) -> Void)?
     
     func writeToPhotoAlbum(image: UIImage) {
+        // Garder une référence forte pour éviter la désallocation
+        ImageSaver.activeInstance = self
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveCompleted), nil)
     }
     
     @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-        if let error = error {
-            errorHandler?(error)
-        } else {
-            successHandler?()
+        DispatchQueue.main.async {
+            if let error = error {
+                self.errorHandler?(error)
+            } else {
+                self.successHandler?()
+            }
+            // Libérer la référence après le callback
+            ImageSaver.activeInstance = nil
         }
     }
 }
@@ -1016,9 +1077,19 @@ struct DocumentPicker: UIViewControllerRepresentable {
 
 struct ShareSheet: UIViewControllerRepresentable {
     let items: [Any]
+    var onComplete: (() -> Void)? = nil
+    var onError: ((Error) -> Void)? = nil
     
     func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
+        let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        controller.completionWithItemsHandler = { activityType, completed, items, error in
+            if let error = error {
+                onError?(error)
+            } else if completed {
+                onComplete?()
+            }
+        }
+        return controller
     }
     
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}

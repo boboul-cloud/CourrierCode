@@ -1,4 +1,6 @@
 import SwiftUI
+import AVFoundation
+import AudioToolbox
 
 struct DecodeurView: View {
     @State private var texteCrypte = ""
@@ -11,10 +13,12 @@ struct DecodeurView: View {
     @State private var showLimiteAtteinte = false
     @State private var correspondantDetecte: String? = nil  // Nom du correspondant détecté
     @State private var modeCarnet = false  // Mode décodage automatique avec carnet
+    @State private var showQRScanner = false
     
     @ObservedObject private var usageManager = UsageManager.shared
     @ObservedObject private var biometricManager = BiometricManager.shared
     @ObservedObject private var contactsManager = ContactsManager.shared
+    @EnvironmentObject var appState: AppState
     private let codeur = CourrierCodeur()
     
     var tableAleatoireActive: Bool {
@@ -72,6 +76,28 @@ struct DecodeurView: View {
             .sheet(isPresented: $showPremiumView) {
                 PremiumView()
             }
+            .sheet(isPresented: $showQRScanner) {
+                QRScannerView { scannedCode in
+                    handleScannedQRCode(scannedCode)
+                }
+            }
+            .onAppear {
+                checkForImportedMessage()
+            }
+            .onChange(of: appState.importedMessage) { _, newMessage in
+                if newMessage != nil {
+                    checkForImportedMessage()
+                }
+            }
+        }
+    }
+    
+    // Vérifie si un message a été importé depuis une autre app
+    private func checkForImportedMessage() {
+        if let imported = appState.importedMessage {
+            print("📥 Message importé détecté: \(imported.count) caractères")
+            self.texteCrypte = imported
+            appState.importedMessage = nil  // Réinitialiser
         }
     }
     
@@ -213,7 +239,23 @@ struct DecodeurView: View {
     private var inputSection: some View {
         GlassCard {
             VStack(alignment: .leading, spacing: 12) {
-                SectionHeader(title: "Message codé", icon: "doc.text.fill", color: AppColors.decode)
+                HStack {
+                    SectionHeader(title: "Message codé", icon: "doc.text.fill", color: AppColors.decode)
+                    Spacer()
+                    Button(action: { showQRScanner = true }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "qrcode.viewfinder")
+                            Text("Scanner")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(AppColors.decode)
+                        .cornerRadius(8)
+                    }
+                }
                 ModernTextEditor(placeholder: "Collez le message codé ici...", text: $texteCrypte, minHeight: 100, accentColor: AppColors.decode)
             }
         }
@@ -430,8 +472,244 @@ struct DecodeurView: View {
             jourDetecte = nil
         }
     }
+    
+    private func handleScannedQRCode(_ code: String) {
+        print("📱 QR Code scanné: \(code)")
+        
+        // Stocker le texte scanné avant de fermer la sheet
+        var scannedText = ""
+        
+        // Vérifier si c'est un lien CourrierCode
+        if code.hasPrefix("courriercode://decode?message=") {
+            let messageEncoded = code.replacingOccurrences(of: "courriercode://decode?message=", with: "")
+            if let message = messageEncoded.removingPercentEncoding {
+                scannedText = message
+            } else {
+                scannedText = messageEncoded
+            }
+        } else if code.hasPrefix("courriercode://") {
+            // Autre format courriercode
+            if let url = URL(string: code),
+               let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+               let messageParam = components.queryItems?.first(where: { $0.name == "message" })?.value {
+                scannedText = messageParam.removingPercentEncoding ?? messageParam
+            } else {
+                scannedText = code
+            }
+        } else {
+            // C'est directement un message codé (pas un lien)
+            scannedText = code
+        }
+        
+        // Fermer d'abord la sheet, puis mettre à jour le texte après un court délai
+        showQRScanner = false
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.texteCrypte = scannedText
+            print("📝 Texte intégré: \(scannedText)")
+        }
+    }
+}
+
+// MARK: - QR Scanner View
+
+struct QRScannerView: View {
+    let onCodeScanned: (String) -> Void
+    @Environment(\.dismiss) var dismiss
+    @State private var isFlashOn = false
+    
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                QRScannerRepresentable(onCodeScanned: { code in
+                    onCodeScanned(code)
+                }, isFlashOn: $isFlashOn)
+                .ignoresSafeArea()
+                
+                VStack {
+                    Spacer()
+                    
+                    // Zone de scan
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.white, lineWidth: 3)
+                        .frame(width: 250, height: 250)
+                        .background(Color.clear)
+                    
+                    Spacer()
+                    
+                    VStack(spacing: 16) {
+                        Text("Scannez un QR code CourrierCode")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                        
+                        Text("Pointez la caméra vers le QR code généré par un autre utilisateur")
+                            .font(.caption)
+                            .foregroundColor(.white.opacity(0.8))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 40)
+                        
+                        Button(action: { isFlashOn.toggle() }) {
+                            HStack {
+                                Image(systemName: isFlashOn ? "flashlight.on.fill" : "flashlight.off.fill")
+                                Text(isFlashOn ? "Flash activé" : "Activer le flash")
+                            }
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 10)
+                            .background(Color.white.opacity(0.2))
+                            .cornerRadius(20)
+                        }
+                    }
+                    .padding(.bottom, 50)
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Annuler") {
+                        dismiss()
+                    }
+                    .foregroundColor(.white)
+                }
+            }
+        }
+    }
+}
+
+// MARK: - QR Scanner UIKit Wrapper
+
+struct QRScannerRepresentable: UIViewControllerRepresentable {
+    let onCodeScanned: (String) -> Void
+    @Binding var isFlashOn: Bool
+    
+    func makeUIViewController(context: Context) -> QRScannerViewController {
+        let controller = QRScannerViewController()
+        controller.onCodeScanned = onCodeScanned
+        return controller
+    }
+    
+    func updateUIViewController(_ uiViewController: QRScannerViewController, context: Context) {
+        uiViewController.setFlash(isFlashOn)
+    }
+}
+
+class QRScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
+    var captureSession: AVCaptureSession?
+    var previewLayer: AVCaptureVideoPreviewLayer?
+    var onCodeScanned: ((String) -> Void)?
+    private var hasScanned = false
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .black
+        setupCamera()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        hasScanned = false
+        if captureSession?.isRunning == false {
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.captureSession?.startRunning()
+            }
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if captureSession?.isRunning == true {
+            captureSession?.stopRunning()
+        }
+    }
+    
+    private func setupCamera() {
+        captureSession = AVCaptureSession()
+        
+        guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else {
+            showNoCameraAlert()
+            return
+        }
+        
+        let videoInput: AVCaptureDeviceInput
+        do {
+            videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
+        } catch {
+            showNoCameraAlert()
+            return
+        }
+        
+        if captureSession?.canAddInput(videoInput) == true {
+            captureSession?.addInput(videoInput)
+        } else {
+            showNoCameraAlert()
+            return
+        }
+        
+        let metadataOutput = AVCaptureMetadataOutput()
+        
+        if captureSession?.canAddOutput(metadataOutput) == true {
+            captureSession?.addOutput(metadataOutput)
+            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            metadataOutput.metadataObjectTypes = [.qr]
+        } else {
+            showNoCameraAlert()
+            return
+        }
+        
+        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
+        previewLayer?.frame = view.layer.bounds
+        previewLayer?.videoGravity = .resizeAspectFill
+        view.layer.addSublayer(previewLayer!)
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.captureSession?.startRunning()
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        previewLayer?.frame = view.layer.bounds
+    }
+    
+    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+        guard !hasScanned else { return }
+        
+        if let metadataObject = metadataObjects.first,
+           let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject,
+           let stringValue = readableObject.stringValue {
+            hasScanned = true
+            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+            onCodeScanned?(stringValue)
+        }
+    }
+    
+    func setFlash(_ on: Bool) {
+        guard let device = AVCaptureDevice.default(for: .video),
+              device.hasTorch else { return }
+        
+        do {
+            try device.lockForConfiguration()
+            device.torchMode = on ? .on : .off
+            device.unlockForConfiguration()
+        } catch {
+            print("Erreur flash: \(error)")
+        }
+    }
+    
+    private func showNoCameraAlert() {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(
+                title: "Caméra non disponible",
+                message: "Cette fonctionnalité nécessite une caméra",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(alert, animated: true)
+        }
+    }
 }
 
 #Preview {
     DecodeurView()
+        .environmentObject(AppState.shared)
 }

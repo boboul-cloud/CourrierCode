@@ -17,9 +17,9 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>1.3</string>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>6</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>UIApplicationSceneManifest</key>
@@ -55,6 +55,8 @@
     <string>Courrier Codé a besoin d'accéder à votre photothèque pour sauvegarder les images décodées.</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Courrier Codé a besoin d'accéder à votre photothèque pour sélectionner des images à encoder.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Courrier Codé utilise la caméra pour scanner les QR codes contenant des messages codés.</string>
     <key>NSFaceIDUsageDescription</key>
     <string>Courrier Codé utilise Face ID pour remplir automatiquement vos codes secrets sauvegardés.</string>
     <key>CFBundleDocumentTypes</key>
@@ -71,11 +73,34 @@
                 <string>public.json</string>
             </array>
         </dict>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>CourrierCode Message</string>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+            <key>LSHandlerRank</key>
+            <string>Alternate</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>public.plain-text</string>
+            </array>
+        </dict>
     </array>
     <key>LSSupportsOpeningDocumentsInPlace</key>
     <false/>
     <key>UIFileSharingEnabled</key>
     <true/>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>com.courriercode.message</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>courriercode</string>
+            </array>
+        </dict>
+    </array>
     <key>UTImportedTypeDeclarations</key>
     <array>
         <dict>

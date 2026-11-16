@@ -28,9 +28,12 @@
 		AAA0002D /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA0002E /* ContactsManager.swift */; };
 		AAA0002F /* CarnetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00031 /* CarnetView.swift */; };
 		AAA00032 /* AutreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00033 /* AutreView.swift */; };
+		BF68404E2F29782F00E9D94B /* DecoupeMotsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF68404D2F29782F00E9D94B /* DecoupeMotsView.swift */; };
+		BF6840502F29790100E9D94B /* GeminiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF68404F2F29790100E9D94B /* GeminiService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		711DC86DD1C7E7318D2F98BE /* DecoupeMotsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoupeMotsView.swift; sourceTree = "<group>"; };
 		AAA00010 /* CourrierCode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CourrierCode.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAA00011 /* CourrierCodeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourrierCodeApp.swift; sourceTree = "<group>"; };
 		AAA00012 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -55,6 +58,8 @@
 		AAA00031 /* CarnetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarnetView.swift; sourceTree = "<group>"; };
 		AAA00033 /* AutreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutreView.swift; sourceTree = "<group>"; };
 		BF397EEC2F1D612F00443C58 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
+		BF68404D2F29782F00E9D94B /* DecoupeMotsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoupeMotsView.swift; sourceTree = "<group>"; };
+		BF68404F2F29790100E9D94B /* GeminiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +108,8 @@
 		AAA00043 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				711DC86DD1C7E7318D2F98BE /* DecoupeMotsView.swift */,
+				BF68404D2F29782F00E9D94B /* DecoupeMotsView.swift */,
 				AAA00013 /* EncodeurView.swift */,
 				AAA00014 /* DecodeurView.swift */,
 				AAA00015 /* TableReferenceView.swift */,
@@ -126,6 +133,7 @@
 		AAA00045 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				BF68404F2F29790100E9D94B /* GeminiService.swift */,
 				AAA00017 /* CourrierCodeur.swift */,
 				AAA00018 /* Dictionnaire.swift */,
 				AAA00021 /* TableAleatoire.swift */,
@@ -215,11 +223,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF68404E2F29782F00E9D94B /* DecoupeMotsView.swift in Sources */,
 				AAA00001 /* CourrierCodeApp.swift in Sources */,
 				AAA00002 /* ContentView.swift in Sources */,
 				AAA00003 /* EncodeurView.swift in Sources */,
 				AAA00004 /* DecodeurView.swift in Sources */,
 				AAA00005 /* TableReferenceView.swift in Sources */,
+				BF6840502F29790100E9D94B /* GeminiService.swift in Sources */,
 				AAA0000B /* DocumentationView.swift in Sources */,
 				AAA0000C /* AppTheme.swift in Sources */,
 				AAA00006 /* ResultBox.swift in Sources */,
@@ -370,7 +380,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "CourrierCode-iOS/Info.plist";
@@ -385,7 +395,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.courriercode.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -400,7 +410,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "CourrierCode-iOS/Info.plist";
@@ -415,7 +425,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.courriercode.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
